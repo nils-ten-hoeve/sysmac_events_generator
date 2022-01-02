@@ -1,0 +1,22 @@
+import 'dart:io';
+
+import 'package:sysmac_events_generator/infrastructure/sysmac/project_index.dart';
+import 'package:sysmac_events_generator/infrastructure/sysmac/sysmac.dart';
+import 'package:sysmac_events_generator/infrastructure/test_resource.dart';
+import 'package:test/test.dart';
+
+main() {
+
+  File file = SysmacProjectTestResource().file;
+  var sysmacProjectFile = SysmacProjectFile(file.path);
+  ProjectIndexXml projectIndexXml = sysmacProjectFile.projectIndexXml;
+
+  group('class: ProjectIndexXml', () {
+    group('method: findDataTypeArchiveFiles', () {
+      test('not empty', () {
+        var dataTypeArchiveFiles =projectIndexXml.dataTypeArchiveXmlFiles();
+        expect(dataTypeArchiveFiles, isNotEmpty) ;
+      });
+    });
+  });
+}
