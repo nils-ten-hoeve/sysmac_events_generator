@@ -71,9 +71,6 @@ main() {
     group('method: toDataTypes', () {
       test('5 main DataTypes in test xml', () {
         expect(dataTypes, hasLength(11));
-        for (var dataType in dataTypes) {
-          print(dataType);
-        }
       });
       group('1st DataTypes in test xml', () {
         test('name==sEvent', () {
@@ -83,7 +80,7 @@ main() {
           expect(dataTypes[0].comment, 'Event');
         });
         test('baseType==UnknownBaseType', () {
-          expect(dataTypes[0].baseType is UnknownBaseType, true);
+          expect(dataTypes[0].baseType is Struct, true);
         });
         test('children.length==2', () {
           expect(dataTypes[0].children, hasLength(2));
@@ -94,13 +91,13 @@ main() {
 
   File file = SysmacProjectTestResource().file;
   var sysmacProjectFile = SysmacProjectFile(file.path);
-  var dataTypeTree=DataTypeTreeFactory(sysmacProjectFile).create();
+  var dataTypeTree = DataTypeTreeFactory(sysmacProjectFile).create();
 
   group('class: DataTypeTreeFactory', () {
     group('method: create', () {
       test('toString isNot Empty', () {
-        print(dataTypeTree);
-       expect(dataTypeTree.toString(), isNotEmpty);
+        //print(dataTypeTree);
+        expect(dataTypeTree.toString(), isNotEmpty);
       });
     });
   });

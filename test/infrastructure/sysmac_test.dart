@@ -47,8 +47,8 @@ main() {
 
     group('property: dataTypes', () {
       test('finds dataTypes', () {
-        var dataTypes =sysmacProjectFile.dataTypeTree;
-        expect(dataTypes, hasLength(1146)) ;
+        var dataTypeTree =sysmacProjectFile.dataTypeTree;
+        expect(dataTypeTree.children.length, 330) ;
       });
     });
   });
