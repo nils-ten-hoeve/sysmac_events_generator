@@ -333,14 +333,37 @@ class ArrayRange {
   }
 }
 
-/// The [BaseType] links to a [DataType]:
-/// in other words the [BaseType] in a [DataType] is another (custom) [DataType]
-///
-/// This [DataType] is being added as a child so that we can use the
-/// full hierarchical tree model. See [DataTypeFactory._updateUnknownBaseTypes]
-// class LinkedBaseType extends BaseType {
-//   @override
-//   String toString() {
-//     return 'LinkBaseType{}';
-//   }
-// }
+/// A [BaseType] that refers to an existing [DataType]:
+class DataTypeReference extends BaseType {
+  final DataType dataType;
+
+  DataTypeReference(this.dataType, List<ArrayRange> arrayRanges) {
+    this.arrayRanges.addAll(arrayRanges);
+  }
+
+  @override
+  String toString() {
+    return super.toString()+ '{$dataType}';
+  }
+}
+
+class DataTypeReferenceFactory {
+  /// Replaces all the [UnknownBaseType]s with [DataTypeReference]s
+  /// when the path can be found
+  void replaceWherePossible(NameSpace root) {
+    for (NameSpace child in root.descendants) {
+      if (child is DataType) {
+        var baseType = child.baseType;
+        if (baseType is UnknownBaseType) {
+          String path = baseType.expression;
+          var referencedDataType = root.findNamePath(path.split('\\'));
+          if (referencedDataType != null && referencedDataType is DataType) {
+            var arrayRanges = baseType.arrayRanges;
+            var reference = DataTypeReference(referencedDataType, arrayRanges);
+            child.baseType = reference;
+          }
+        }
+      }
+    }
+  }
+}

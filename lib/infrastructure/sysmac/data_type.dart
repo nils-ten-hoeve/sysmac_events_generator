@@ -11,51 +11,25 @@ const String commentAttribute = 'Comment';
 
 const String nameSpacePathSeparator = '\\';
 
-class DataTypeTreeFactory {
+class DataTypeTree extends NameSpace {
   final SysmacProjectFile sysmacProjectFile;
 
-  DataTypeTreeFactory(this.sysmacProjectFile);
-
-  NameSpace create() {
-    var root = _createDataTypes();
-    //_updateUnknownBaseTypes(root); TODO endless loop in tree
-    return root;
+  DataTypeTree(this.sysmacProjectFile) : super('$DataTypeTree') {
+    _addAndCreateChildren();
+    DataTypeReferenceFactory().replaceWherePossible(this);
   }
 
-  void _updateUnknownBaseTypes(NameSpace root) {
-    var dataTypesWithUnknownBaseType = root.descendants
-        .where((nameSpace) => isDataTypeWithUnknownBaseType(nameSpace))
-        .map((nameSpace) => nameSpace as DataType);
-    for (var dataType in dataTypesWithUnknownBaseType) {
-      var expression = (dataType.baseType as UnknownBaseType).expression;
-      var linkedDataType =
-          root.findNamePath(expression.split(nameSpacePathSeparator));
-      if (linkedDataType != null && dataType.children.isEmpty) {
-        // dataType.baseType = LinkedBaseType();
-        dataType.children.add(linkedDataType);
-      }
-    }
-  }
-
-  isDataTypeWithUnknownBaseType(NameSpace nameSpace) =>
-      nameSpace is DataType && nameSpace.baseType is UnknownBaseType;
-
-  // Map<String, DataType> _createDataTypesByPath(List<DataType> dataTypes) =>
-  //     {for (var dataType in dataTypes) dataType.path: dataType};
-
-  NameSpace _createDataTypes() {
+  _addAndCreateChildren() {
     var projectIndexXml = sysmacProjectFile.projectIndexXml;
     var dataTypeArchiveXmlFiles = projectIndexXml.dataTypeArchiveXmlFiles();
 
-    var root = NameSpace('root');
     for (var dataTypeArchiveXmlFile in dataTypeArchiveXmlFiles) {
       String nameSpacePath = dataTypeArchiveXmlFile.nameSpacePath;
-      NameSpace nameSpace = _findOrCreateNameSpacePath(root, nameSpacePath);
+      NameSpace nameSpace = _findOrCreateNameSpacePath(this, nameSpacePath);
 
       var dataTypes = dataTypeArchiveXmlFile.toDataTypes();
       nameSpace.children.addAll(dataTypes);
     }
-    return root;
   }
 
   NameSpace _findOrCreateNameSpacePath(
@@ -112,7 +86,8 @@ class DataTypeArchiveXmlFile extends ArchiveXml {
     String name = dataTypeElement.getAttribute(nameAttribute)!;
     String baseTypeExpression =
         dataTypeElement.getAttribute(baseTypeAttribute)!;
-    BaseType baseType = BaseTypeFactory().createFromExpression(baseTypeExpression);
+    BaseType baseType =
+        BaseTypeFactory().createFromExpression(baseTypeExpression);
     String comment = dataTypeElement.getAttribute(commentAttribute)!;
     var dataType = DataType(
       name: name,

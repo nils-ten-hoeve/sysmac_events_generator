@@ -61,7 +61,6 @@ class DataType extends NameSpace {
     required this.comment,
   }) : super(name);
 
-  String get path => '';
 
   @override
   String toString() {
@@ -75,4 +74,6 @@ class DataType extends NameSpace {
     }
     return string;
   }
+
+
 }

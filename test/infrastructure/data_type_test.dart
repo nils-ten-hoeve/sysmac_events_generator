@@ -91,13 +91,12 @@ main() {
 
   File file = SysmacProjectTestResource().file;
   var sysmacProjectFile = SysmacProjectFile(file.path);
-  var dataTypeTree = DataTypeTreeFactory(sysmacProjectFile).create();
+  var dataTypeTree = DataTypeTree(sysmacProjectFile);
 
-  group('class: DataTypeTreeFactory', () {
-    group('method: create', () {
-      test('toString isNot Empty', () {
-        //print(dataTypeTree);
-        expect(dataTypeTree.toString(), isNotEmpty);
+  group('class: DataTypeTree', () {
+    group('constructor', () {
+      test('children isNot Empty', () {
+        expect(dataTypeTree.children, isNotEmpty);
       });
     });
   });

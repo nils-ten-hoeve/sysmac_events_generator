@@ -14,10 +14,10 @@ class SysmacProjectFile {
   static String extension = 'smc2';
   final Archive archive;
   ProjectIndexXml? _cachedProjectIndexXml;
-  NameSpace? _cachedDataTypeTree;
+  DataTypeTree? _cachedDataTypeTree;
 
   SysmacProjectFile(String sysmacProjectFilePath)
-      : archive = createArchive(sysmacProjectFilePath);
+      : archive = _createArchive(sysmacProjectFilePath);
 
   static _validateExtension(File file) {
     if (!file.path.toLowerCase().endsWith(".$extension")) {
@@ -39,7 +39,7 @@ class SysmacProjectFile {
     }
   }
 
-  static Archive createArchive(String sysmacProjectFilePath) {
+  static Archive _createArchive(String sysmacProjectFilePath) {
     final file = File(sysmacProjectFilePath);
     _validateNotEmpty(file);
     _validateExtension(file);
@@ -53,8 +53,8 @@ class SysmacProjectFile {
     return _cachedProjectIndexXml!;
   }
 
-  NameSpace get dataTypeTree {
-    _cachedDataTypeTree ??= DataTypeTreeFactory(this).create();
+  DataTypeTree get dataTypeTree {
+    _cachedDataTypeTree ??= DataTypeTree(this);
     return _cachedDataTypeTree!;
   }
 }
