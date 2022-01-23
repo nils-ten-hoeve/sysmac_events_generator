@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 import 'package:sysmac_events_generator/domain/data_type.dart';
+import 'package:sysmac_events_generator/infrastructure/sysmac/data_type.dart';
 
 class BaseTypeFactory {
   BaseTypeSubFactories baseTypeSubFactories = BaseTypeSubFactories();
@@ -350,20 +351,28 @@ class DataTypeReference extends BaseType {
 class DataTypeReferenceFactory {
   /// Replaces all the [UnknownBaseType]s with [DataTypeReference]s
   /// when the path can be found
-  void replaceWherePossible(NameSpace root) {
-    for (NameSpace child in root.descendants) {
+  void replaceWherePossible(DataTypeTree dataTypeTree) {
+    for (NameSpace child in dataTypeTree.descendants) {
       if (child is DataType) {
         var baseType = child.baseType;
         if (baseType is UnknownBaseType) {
-          String path = baseType.expression;
-          var referencedDataType = root.findNamePath(path.split('\\'));
-          if (referencedDataType != null && referencedDataType is DataType) {
-            var arrayRanges = baseType.arrayRanges;
-            var reference = DataTypeReference(referencedDataType, arrayRanges);
-            child.baseType = reference;
+          var dataTypeReference=createFromUnknownDataType(dataTypeTree, baseType);
+          if (dataTypeReference!=null) {
+            child.baseType=dataTypeReference;
           }
         }
       }
+    }
+  }
+
+  DataTypeReference? createFromUnknownDataType(DataTypeTree dataTypeTree, UnknownBaseType baseType) {
+    String path = baseType.expression;
+    var referencedDataType = dataTypeTree.findNamePathString(path);
+    if (referencedDataType != null && referencedDataType is DataType) {
+      var arrayRanges = baseType.arrayRanges;
+      return DataTypeReference(referencedDataType, arrayRanges);
+    } else {
+      return null;
     }
   }
 }

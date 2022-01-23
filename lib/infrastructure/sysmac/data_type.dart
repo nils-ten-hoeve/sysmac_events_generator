@@ -57,6 +57,8 @@ class DataTypeTree extends NameSpace {
     }
     return nameSpace;
   }
+
+
 }
 
 /// Represents an [ArchiveXml] with information of some [DataType]s within a given [nameSpacePath]

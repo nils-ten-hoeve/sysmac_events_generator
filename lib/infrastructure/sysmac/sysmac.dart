@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
-import 'package:sysmac_events_generator/domain/data_type.dart';
 import 'package:sysmac_events_generator/infrastructure/sysmac/project_index.dart';
+import 'package:sysmac_events_generator/infrastructure/sysmac/variable.dart';
 import 'package:xml/xml.dart';
 
 import 'data_type.dart';
@@ -15,6 +15,7 @@ class SysmacProjectFile {
   final Archive archive;
   ProjectIndexXml? _cachedProjectIndexXml;
   DataTypeTree? _cachedDataTypeTree;
+  GlobalVariableService? _cachedVariableTree;
 
   SysmacProjectFile(String sysmacProjectFilePath)
       : archive = _createArchive(sysmacProjectFilePath);
@@ -49,13 +50,18 @@ class SysmacProjectFile {
   }
 
   ProjectIndexXml get projectIndexXml {
-    _cachedProjectIndexXml ??= ProjectIndexXml(archive);
+    _cachedProjectIndexXml ??= ProjectIndexXml(this);
     return _cachedProjectIndexXml!;
   }
 
   DataTypeTree get dataTypeTree {
     _cachedDataTypeTree ??= DataTypeTree(this);
     return _cachedDataTypeTree!;
+  }
+
+  GlobalVariableService get variableTree {
+    _cachedVariableTree ??= GlobalVariableService(this);
+    return _cachedVariableTree!;
   }
 }
 

@@ -37,11 +37,11 @@ class NameSpace {
     }
     var childNameToFind = namesToFind.first;
     NameSpace? foundChild =
-          children.firstWhereOrNull((child) => child.name == childNameToFind);
-    if (foundChild==null) {
+        children.firstWhereOrNull((child) => child.name == childNameToFind);
+    if (foundChild == null) {
       return null;
     }
-    if (namesToFind.length==1) {
+    if (namesToFind.length == 1) {
       return foundChild;
     } else {
       //try to find rest of the names
@@ -49,6 +49,9 @@ class NameSpace {
       return foundChild.findNamePath(namesToFind);
     }
   }
+
+  NameSpace? findNamePathString(String pathToFind) =>
+      findNamePath(pathToFind.split('\\'));
 }
 
 class DataType extends NameSpace {
@@ -61,11 +64,10 @@ class DataType extends NameSpace {
     required this.comment,
   }) : super(name);
 
-
   @override
   String toString() {
     String string =
-        'DataType{name: $name, comment: $comment, baseType: $baseType}';
+        '$DataType{name: $name, comment: $comment, baseType: $baseType}';
     for (var child in children) {
       var lines = child.toString().split('\n');
       for (var line in lines) {
@@ -74,6 +76,4 @@ class DataType extends NameSpace {
     }
     return string;
   }
-
-
 }

@@ -18,5 +18,11 @@ main() {
         expect(dataTypeArchiveFiles, isNotEmpty) ;
       });
     });
+    group('method: findDataTypeArchiveFiles', () {
+      test('not empty', () {
+        var globalVariableArchiveFiles =projectIndexXml.globalVariableArchiveXmlFiles();
+        expect(globalVariableArchiveFiles, isNotEmpty) ;
+      });
+    });
   });
 }
