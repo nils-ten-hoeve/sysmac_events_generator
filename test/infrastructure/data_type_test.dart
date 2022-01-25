@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:sysmac_events_generator/infrastructure/sysmac/base_type.dart';
 import 'package:sysmac_events_generator/infrastructure/sysmac/data_type.dart';
 import 'package:sysmac_events_generator/infrastructure/sysmac/sysmac.dart';
-import 'package:sysmac_events_generator/infrastructure/test_resource.dart';
+import 'test_resource.dart';
 import 'package:test/test.dart';
 
 const String xml = """<?xml version="1.0" encoding="utf-8"?>

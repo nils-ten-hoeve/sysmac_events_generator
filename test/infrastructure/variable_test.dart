@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:sysmac_events_generator/infrastructure/sysmac/base_type.dart';
 import 'package:sysmac_events_generator/infrastructure/sysmac/sysmac.dart';
 import 'package:sysmac_events_generator/infrastructure/sysmac/variable.dart';
-import 'package:sysmac_events_generator/infrastructure/test_resource.dart';
+import 'test_resource.dart';
 import 'package:test/test.dart';
 
 main() {
@@ -31,6 +31,7 @@ main() {
         expect(results, hasLength(1));
         expect(results[0].name,GlobalVariableService.eventGlobalVariableName);
         expect(results[0].baseType, isA<DataTypeReference>());
+        expect(results[0].children.isNotEmpty, true);
         expect((results[0].baseType as DataTypeReference).dataType.baseType, isA<Struct>());
       });
     });

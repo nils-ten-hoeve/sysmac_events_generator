@@ -65,6 +65,15 @@ class DataType extends NameSpace {
   }) : super(name);
 
   @override
+  List<NameSpace> get children {
+    if (baseType is DataTypeReference) {
+      return [(baseType as DataTypeReference).dataType];
+    } else {
+      return super.children;
+    }
+  }
+
+  @override
   String toString() {
     String string =
         '$DataType{name: $name, comment: $comment, baseType: $baseType}';
